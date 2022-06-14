@@ -2,8 +2,8 @@ package io.github.thatyane.passwordvalidator.application.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.thatyane.passwordvalidator.application.dto.PasswordRequest;
-import io.github.thatyane.passwordvalidator.domain.model.Password;
 import io.github.thatyane.passwordvalidator.domain.service.PasswordService;
+import io.github.thatyane.passwordvalidator.domain.service.steps.PasswordCatalog;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +38,10 @@ class PasswordControllerTest {
     @Test
     public void shouldValidateValidPassword() throws Exception {
         PasswordRequest passwordRequest = new PasswordRequest("AbTp9!fok");
-        Password password = new Password(passwordRequest.getPassword());
+        String password =passwordRequest.getPassword();
         String json = new ObjectMapper().writeValueAsString(passwordRequest);
 
-        when(passwordService.isValid(password)).thenReturn(Boolean.TRUE);
+        when(passwordService.isValid(password, PasswordCatalog.validatePassword)).thenReturn(Boolean.TRUE);
 
         MockHttpServletRequestBuilder request = post(PASSWORD_PATH)
                 .accept(MediaType.APPLICATION_JSON)
@@ -53,16 +53,16 @@ class PasswordControllerTest {
                 .andExpect(jsonPath(FIELD_VALID).exists())
                 .andExpect(jsonPath(FIELD_VALID).value(Boolean.TRUE));
 
-        verify(passwordService).isValid(password);
+        verify(passwordService).isValid(password, PasswordCatalog.validatePassword);
     }
 
     @Test
     public void shouldValidateInvalidPassword() throws Exception {
         PasswordRequest passwordRequest = new PasswordRequest("p9!fok");
-        Password password = new Password(passwordRequest.getPassword());
+        String password = passwordRequest.getPassword();
         String json = new ObjectMapper().writeValueAsString(passwordRequest);
 
-        when(passwordService.isValid(password)).thenReturn(Boolean.FALSE);
+        when(passwordService.isValid(password, PasswordCatalog.validatePassword)).thenReturn(Boolean.FALSE);
 
         MockHttpServletRequestBuilder request = post(PASSWORD_PATH)
                 .accept(MediaType.APPLICATION_JSON)
@@ -74,6 +74,6 @@ class PasswordControllerTest {
                 .andExpect(jsonPath(FIELD_VALID).exists())
                 .andExpect(jsonPath(FIELD_VALID).value(Boolean.FALSE));
 
-        verify(passwordService).isValid(password);
+        verify(passwordService).isValid(password, PasswordCatalog.validatePassword);
     }
 }

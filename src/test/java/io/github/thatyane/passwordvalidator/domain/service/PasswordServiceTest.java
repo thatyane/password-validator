@@ -1,6 +1,6 @@
 package io.github.thatyane.passwordvalidator.domain.service;
 
-import io.github.thatyane.passwordvalidator.domain.model.Password;
+import io.github.thatyane.passwordvalidator.domain.service.steps.PasswordCatalog;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ class PasswordServiceTest {
             "CarTp*8Gi10WF", "BcYp9(lfS25", "HcBRp6)mQU", "iByp658-Rg0", "Knvpx+fog7", "Celas@!%978"})
     void success(String value) {
 
-        Assertions.assertTrue(passwordService.isValid(new Password(value)));
+        Assertions.assertTrue(passwordService.isValid(value, PasswordCatalog.validatePassword));
     }
 
     @ParameterizedTest
@@ -30,38 +30,38 @@ class PasswordServiceTest {
             "AbT?p98fok", "AbT}p98fok", "AbT{p98fok", "AbT]p98fok", "AbT[p98fok", "AbTxp98~ok", "AbT´p98fok", "AbT=p98fok"})
     void failedWithoutSpecialChars(String value) {
 
-        Assertions.assertFalse(passwordService.isValid(new Password(value)));
+        Assertions.assertFalse(passwordService.isValid(value, PasswordCatalog.validatePassword));
     }
 
     @Test
     void failedWithoutDigit() {
 
-        Assertions.assertFalse(passwordService.isValid(new Password("QAScvf$&D")));
+        Assertions.assertFalse(passwordService.isValid("QAScvf$&D", PasswordCatalog.validatePassword));
     }
 
     @Test
     void failedWithoutUpperCase() {
 
-        Assertions.assertFalse(passwordService.isValid(new Password("qw$7tyufg")));
+        Assertions.assertFalse(passwordService.isValid("qw$7tyufg", PasswordCatalog.validatePassword));
     }
 
     @Test
     void failedWithoutLowerCase() {
 
-        Assertions.assertFalse(passwordService.isValid(new Password("QAZXSWE12%")));
+        Assertions.assertFalse(passwordService.isValid("QAZXSWE12%", PasswordCatalog.validatePassword));
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"AbTp9!fok ", "AbT 9!fok", " AbTp9!fok"})
     void failedWithSpaces(String value) {
 
-        Assertions.assertFalse(passwordService.isValid(new Password(value)));
+        Assertions.assertFalse(passwordService.isValid(value, PasswordCatalog.validatePassword));
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"", "a", "ab", "A#1", "a+C9", "6b$De", "q7Ert!",  "YuI5pA%", "sDfgHj#6"})
     void failedWithoutMinLenght(String value) {
 
-        Assertions.assertFalse(passwordService.isValid(new Password(value)));
+        Assertions.assertFalse(passwordService.isValid(value, PasswordCatalog.validatePassword));
     }
 }

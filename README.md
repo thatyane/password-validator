@@ -28,4 +28,5 @@ http://localhost:8080/swagger-ui/index.html#
 * **Junit 5**
 * **Mockito**
 * **OpenAPI 3**
-* **Swagger UI**
+* **Swagger 3**
+* **JUnit 5**

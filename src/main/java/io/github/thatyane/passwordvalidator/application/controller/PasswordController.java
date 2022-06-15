@@ -25,7 +25,7 @@ public class PasswordController implements PasswordControllerDoc {
     public PasswordResponse isValid(@RequestBody PasswordRequest passwordRequest) {
         log.info("Validating password: {}", passwordRequest.getPassword());
         boolean isValid = passwordService.isValid(passwordRequest.getPassword(), PasswordCatalog.validatePassword);
-
+        log.info("The password is {}", isValid ? "valid" : "invalid");
         return new PasswordResponse(isValid);
     }
 }

@@ -12,7 +12,7 @@ public class HasSpecialChar extends PasswordValidatorStep implements RegexValida
     @Override
     public boolean validate(String password) {
         boolean result = match(REGEX_SPECIAL_CHARS, password);
-        log.info("The password has special char: {}", result);
+        log.info("The password has special characters: {}", result);
         return result && validateNext(password);
     }
 }
